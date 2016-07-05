@@ -2,7 +2,9 @@ package hackerRank;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by tdo on 29-Jun-16.
@@ -11,9 +13,9 @@ import java.util.*;
  */
 public class DemandingMoney {
     static int maxMoney = 0;
-    static Set<Integer> maxMoneySet = new HashSet<>();
+    static Set<Set<Integer>> maxSet = new HashSet<>();
     static int[][] map;
-    static int[] arr;
+    static int[] money;
 
     public static void main(String[] args) throws FileNotFoundException {
         System.setIn(new FileInputStream("a.txt"));
@@ -21,9 +23,9 @@ public class DemandingMoney {
         int n = in.nextInt();
         int m = in.nextInt();
 
-        arr = new int[n];
+        money = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = in.nextInt();
+            money[i] = in.nextInt();
         }
 
         map = new int[n][n];
@@ -40,7 +42,7 @@ public class DemandingMoney {
 
         for (int i = 0; i < n; i++) {
             if (getNumNeighbor(map, i) == 0) {
-                if (arr[i] == 0) {
+                if (money[i] == 0) {
                     zeroMoneyNoNeighbor.add(i);
                 }
                 else {
@@ -52,16 +54,19 @@ public class DemandingMoney {
             }
         }
 
-        int max = processMap(hasNeighbor);
+        int max = processMap(hasNeighbor, new HashSet<>());
 
         for (int i : hasMoneyNoNeighbor) {
-            max += i;
+            max += money[i];
         }
 
-        System.out.println(max);
+        int numWay = maxSet.size();
+        numWay = numWay * (int)Math.pow(2, zeroMoneyNoNeighbor.size());
+
+        System.out.println(max + " " + numWay);
     }
 
-    static int processMap(Set<Integer> toExplore) {
+    static int processMap(Set<Integer> toExplore, Set<Integer> explored) {
         int localMax = 0;
         for (int i : toExplore) {
             Set<Integer> newToExplore = new HashSet<>(toExplore);
@@ -74,15 +79,27 @@ public class DemandingMoney {
                 }
             }
 
-            int s = arr[i] + processMap(newToExplore);
+            Set<Integer> newExplored = new HashSet<>(explored);
+            newExplored.add(i);
+            int s = money[i] + processMap(newToExplore, newExplored);
 
             if (s > localMax) {
                 localMax = s;
             }
         }
 
-        if (localMax > maxMoney) {
-            maxMoney = localMax;
+        int exploredMoney = 0;
+        for (int i : explored) {
+            exploredMoney += money[i];
+        }
+
+        if (exploredMoney > maxMoney) {
+            maxMoney = exploredMoney;
+            maxSet = new HashSet<>();
+            maxSet.add(explored);
+        }
+        else if (exploredMoney == maxMoney) {
+            maxSet.add(explored);
         }
 
         return localMax;
