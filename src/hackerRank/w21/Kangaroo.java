@@ -1,4 +1,4 @@
-package hackerRank;
+package hackerRank.w21;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;

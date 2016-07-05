@@ -1,4 +1,4 @@
-package hackerRank;
+package hackerRank.wcs4;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
