@@ -1,4 +1,4 @@
-package hackerRank.hack39;
+package hackerRank.contests.hack101.hack39;
 
 import java.io.FileInputStream;
 import java.io.IOException;

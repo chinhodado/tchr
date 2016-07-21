@@ -1,4 +1,4 @@
-package hackerRank.w21;
+package hackerRank.contests.w21;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;

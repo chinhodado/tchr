@@ -1,4 +1,4 @@
-package hackerRank.hack38;
+package hackerRank.contests.hack101.hack38;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;

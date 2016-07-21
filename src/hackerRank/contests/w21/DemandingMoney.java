@@ -1,4 +1,4 @@
-package hackerRank.w21;
+package hackerRank.contests.w21;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

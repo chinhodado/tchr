@@ -1,4 +1,4 @@
-package hackerRank.hr9;
+package hackerRank.contests.hourrank.hr9;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package hackerRank.wcs4;
+package hackerRank.contests.wcs4;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
