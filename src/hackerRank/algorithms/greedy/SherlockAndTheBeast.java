@@ -1,3 +1,5 @@
+package hackerRank.algorithms.greedy;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;

@@ -1,3 +1,5 @@
+package hackerRank.algorithms.greedy;
+
 import java.io.*;
 import java.util.*;
 
