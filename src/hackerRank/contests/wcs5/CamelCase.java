@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 /**
  * Created by Chin on 23-Jul-16.
- * TODO: bad running time
  */
 public class CamelCase {
     public static void main(String[] args) throws FileNotFoundException {
