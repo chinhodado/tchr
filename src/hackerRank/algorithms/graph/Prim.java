@@ -1,10 +1,14 @@
 package hackerRank.algorithms.graph;
 
+import dataStructure.FibonacciHeap;
+
 import java.util.*;
 
 /**
  * Created by tdo on 08-Aug-16.
- * Prim using PriorityQueue - not optimal since using PriorityQueue's remove which is O(n)
+ * Prim using PriorityQueue and FibonacciHeap
+ *  - PriorityQueue: not optimal since using PriorityQueue's remove which is O(n)
+ *  - FibonacciHeap: theoretically more optimal
  */
 public class Prim {
     public static class Node {
@@ -72,26 +76,47 @@ public class Prim {
 
         int s = in.nextInt() - 1;
 
-        Queue<Node> queue = new PriorityQueue<>(8, (pos1, pos2) -> pos1.mstCost - pos2.mstCost);
+//        Queue<Node> queue = new PriorityQueue<>(8, (pos1, pos2) -> pos1.mstCost - pos2.mstCost);
+//
+//        for (Node node : arr) {
+//            if (node.id == s) {
+//                node.mstCost = 0;
+//            }
+//            queue.add(node);
+//        }
 
+        Set<Node> mst = new HashSet<>();
+//        // note that we're not interested in the actual MST here, we're just interested in the min cost,
+//        // hence no info about the actual edges is recorded.
+//        while (!queue.isEmpty()) {
+//            Node current = queue.remove();
+//            mst.add(current);
+//            for (Node neighbor : current.adjacents) {
+//                if (!mst.contains(neighbor) && map[current.id][neighbor.id] < neighbor.mstCost) {
+//                    neighbor.mstCost = map[current.id][neighbor.id];
+//                    queue.remove(neighbor);
+//                    queue.add(neighbor);
+//                }
+//            }
+//        }
+
+        FibonacciHeap<Node> heap = new FibonacciHeap<>();
+        ArrayList<FibonacciHeap.Entry<Node>> entries = new ArrayList<>();
         for (Node node : arr) {
             if (node.id == s) {
                 node.mstCost = 0;
             }
-            queue.add(node);
+            entries.add(heap.enqueue(node, node.mstCost));
         }
 
-        Set<Node> mst = new HashSet<>();
-        // note that we're not interested in the actual MST here, we're just interested in the min cost,
-        // hence no info about the actual edges is recorded.
-        while (!queue.isEmpty()) {
-            Node current = queue.remove();
+        while (!heap.isEmpty()) {
+            Node current = heap.dequeueMin().getValue();
             mst.add(current);
             for (Node neighbor : current.adjacents) {
                 if (!mst.contains(neighbor) && map[current.id][neighbor.id] < neighbor.mstCost) {
                     neighbor.mstCost = map[current.id][neighbor.id];
-                    queue.remove(neighbor);
-                    queue.add(neighbor);
+                    FibonacciHeap.Entry entry = entries.get(neighbor.id);
+                    heap.decreaseKey(entry, neighbor.mstCost);
                 }
             }
         }
