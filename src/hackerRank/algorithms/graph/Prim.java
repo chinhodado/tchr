@@ -11,7 +11,7 @@ import java.util.*;
  *  - FibonacciHeap: theoretically more optimal
  */
 public class Prim {
-    public static class Node {
+    private static class Node {
         int id;
         int mstCost = Integer.MAX_VALUE;
         Set<Node> adjacents;
