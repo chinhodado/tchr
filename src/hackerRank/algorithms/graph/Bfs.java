@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Bfs {
-    public static class Vertex {
+    static class Vertex {
         int id;
         int distance = -1;
         Set<Vertex> adjacents;
