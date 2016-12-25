@@ -10,20 +10,20 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Bfs {
-    static class Vertex {
+    private static class Node {
         int id;
         int distance = -1;
-        Set<Vertex> adjacents;
-        public Vertex(int id) {
+        Set<Node> adjacents;
+        public Node(int id) {
             this.id = id;
-            adjacents = new HashSet<Vertex>();
+            adjacents = new HashSet<>();
         }
-        public void addNeighbor(Vertex v) {
+        public void addNeighbor(Node v) {
             if (!adjacents.contains(v)) {
                 adjacents.add(v);
             }
         }
-        public boolean isNeighbor(Vertex v) {
+        public boolean isNeighbor(Node v) {
             return adjacents.contains(v);
         }
         @Override
@@ -38,7 +38,7 @@ public class Bfs {
             if (getClass() != obj.getClass()) {
                 return false;
             }
-            final Vertex other = (Vertex) obj;
+            final Node other = (Node) obj;
             return this.id == other.id;
         }
         @Override
@@ -53,12 +53,12 @@ public class Bfs {
         for (int numTest = 0; numTest < numTestCase; numTest++) {
             int n = in.nextInt();
             int m = in.nextInt();
-            HashMap<Vertex, Vertex> vertices = new HashMap<Vertex, Vertex>();
+            HashMap<Node, Node> vertices = new HashMap<>();
             for (int i = 0; i < m; i++) {
                 int t = in.nextInt();
-                Vertex v1 = new Vertex(t);
+                Node v1 = new Node(t);
                 t = in.nextInt();
-                Vertex v2 = new Vertex(t);
+                Node v2 = new Node(t);
                 if (!vertices.containsKey(v1)) {
                     vertices.put(v1, v1);
                 }
@@ -75,21 +75,21 @@ public class Bfs {
                 v2.addNeighbor(v1);
             }
             for (int i = 1; i <= n; i++) {
-                Vertex tmp = new Vertex(i);
+                Node tmp = new Node(i);
                 if (!vertices.containsKey(tmp))
                     vertices.put(tmp, tmp);
             }
             int t = in.nextInt();
-            Vertex initial = vertices.get(new Vertex(t));
+            Node initial = vertices.get(new Node(t));
             initial.distance = 0;
-            Queue<Vertex> frontierNodes = new LinkedList<Vertex>();
+            Queue<Node> frontierNodes = new LinkedList<>();
             frontierNodes.add(initial);
-            Set<Vertex> exploredNodes = new HashSet<Vertex>();
+            Set<Node> exploredNodes = new HashSet<>();
 
             while (!frontierNodes.isEmpty()) {
-                Vertex currentNode = frontierNodes.remove();
+                Node currentNode = frontierNodes.remove();
                 exploredNodes.add(currentNode);
-                for (Vertex neighbor : currentNode.adjacents) {
+                for (Node neighbor : currentNode.adjacents) {
                     if (!exploredNodes.contains(neighbor) && !frontierNodes.contains(neighbor)) {
                         frontierNodes.add(neighbor);
                         neighbor.distance = currentNode.distance + 1;
@@ -98,7 +98,7 @@ public class Bfs {
             }
 
             int i = 0;
-            for (Vertex v : vertices.keySet()) {
+            for (Node v : vertices.keySet()) {
                 if (v.equals(initial)) continue;
                 if (v.distance != -1) {
                     System.out.print(v.distance * 6);
