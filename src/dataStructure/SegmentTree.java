@@ -56,6 +56,7 @@ public class SegmentTree {
         if (size == 1) {
             heap[v].sum = array[from];
             heap[v].min = array[from];
+            heap[v].minIndex = from;
         } else {
             // Build childs
             build(2 * v, from, size / 2);
@@ -64,6 +65,7 @@ public class SegmentTree {
             heap[v].sum = heap[2 * v].sum + heap[2 * v + 1].sum;
             // min = min of the children
             heap[v].min = Math.min(heap[2 * v].min, heap[2 * v + 1].min);
+            heap[v].minIndex = heap[2 * v].min <= heap[2 * v + 1].min? heap[2 * v].minIndex : heap[2 * v + 1].minIndex;
         }
     }
 
@@ -110,33 +112,38 @@ public class SegmentTree {
      *
      * @param from from index
      * @param to   to index
-     * @return min
+     * @return min[], min[0] is the min value, min[1] is the index of the min in the original array
      */
-    public int getMin(int from, int to) {
+    public int[] getMin(int from, int to) {
         return getMin(1, from, to);
     }
 
-    private int getMin(int v, int from, int to) {
+    private int[] getMin(int v, int from, int to) {
         Node n = heap[v];
 
         // If you did a range update that contained this node, you can infer the Min value without going down the tree
         if (n.pendingVal != null && contains(n.from, n.to, from, to)) {
-            return n.pendingVal;
+            return new int[] {n.pendingVal, n.minIndex};
         }
 
         if (contains(from, to, n.from, n.to)) {
-            return heap[v].min;
+            return new int[] {heap[v].min, heap[v].minIndex};
         }
 
         if (intersects(from, to, n.from, n.to)) {
             propagate(v);
-            int leftMin = getMin(2 * v, from, to);
-            int rightMin = getMin(2 * v + 1, from, to);
+            int[] leftMin = getMin(2 * v, from, to);
+            int[] rightMin = getMin(2 * v + 1, from, to);
 
-            return Math.min(leftMin, rightMin);
+            if (leftMin[0] <= rightMin[0]) {
+                return leftMin;
+            }
+            else {
+                return rightMin;
+            }
         }
 
-        return Integer.MAX_VALUE;
+        return new int[] {Integer.MAX_VALUE, Integer.MAX_VALUE};
     }
 
     /**
@@ -162,8 +169,8 @@ public class SegmentTree {
         Node n = heap[v];
 
         /**
-         * If the updating-range contains the portion of the current Node  We lazily update it.
-         * This means We do NOT update each position of the vector, but update only some temporal
+         * If the updating-range contains the portion of the current Node we lazily update it.
+         * This means we do NOT update each position of the vector, but update only some temporal
          * values into the Node; such values into the Node will be propagated down to its children only when they need to.
          */
         if (contains(from, to, n.from, n.to)) {
@@ -174,9 +181,9 @@ public class SegmentTree {
 
         if (intersects(from, to, n.from, n.to)) {
             /**
-             * Before keeping going down to the tree We need to propagate the
+             * Before keeping going down to the tree we need to propagate the
              * the values that have been temporally/lazily saved into this Node to its children
-             * So that when We visit them the values  are properly updated
+             * So that when we visit them the values are properly updated
              */
             propagate(v);
 
@@ -185,6 +192,7 @@ public class SegmentTree {
 
             n.sum = heap[2 * v].sum + heap[2 * v + 1].sum;
             n.min = Math.min(heap[2 * v].min, heap[2 * v + 1].min);
+            n.minIndex = heap[2 * v].min <= heap[2 * v + 1].min? heap[2 * v].minIndex : heap[2 * v + 1].minIndex;
         }
     }
 
@@ -204,6 +212,7 @@ public class SegmentTree {
         n.pendingVal = value;
         n.sum = n.size() * value;
         n.min = value;
+        n.minIndex = n.from;
         array[n.from] = value;
     }
 
@@ -224,6 +233,7 @@ public class SegmentTree {
     static class Node {
         int sum;
         int min;
+        int minIndex;
         // Here we store the value that will be propagated lazily
         Integer pendingVal = null;
         int from;
