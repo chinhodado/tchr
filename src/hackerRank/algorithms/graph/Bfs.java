@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class Bfs {
         for (int numTest = 0; numTest < numTestCase; numTest++) {
             int n = in.nextInt();
             int m = in.nextInt();
-            HashMap<Node, Node> vertices = new HashMap<>();
+            Map<Node, Node> vertices = new HashMap<>();
             for (int i = 0; i < m; i++) {
                 int t = in.nextInt();
                 Node v1 = new Node(t);
