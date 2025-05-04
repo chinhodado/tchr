@@ -43,3 +43,4 @@ local.properties
 *.class
 
 a.txt
+**/doc/content/
